@@ -7,7 +7,7 @@ spec:
   - env:
     - name: RUNTIME_LOCAL_MODELS_DIR
       value: /mnt/models
-    image: quay.io/opendatahub/caikit-tgis-serving@sha256:d11f2c77496bd500636ce402c20b19113bd0270de86e814cb26e40a404d05683
+    image: quay.io/modh/caikit-tgis-serving@sha256:af7a1aafd285e2b8142bc53a19ec2c70f327d9b77a65917153823952a337f743
 
     name: kserve-container
     ports:
