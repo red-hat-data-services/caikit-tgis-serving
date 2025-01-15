@@ -25,6 +25,7 @@ The procedures for installing and deploying the Caikit-TGIS-Serving stack have b
 - You need cluster administrator permissions for many of the procedures (such as, installing operators, setting service-mesh configuration, and enabling http2).
 - You have installed the OpenShift CLI (`oc`).
 
+
 ### Procedures
 
 As of Red Hat OpenShift Data Science version 2.5.0, you can follow the official docs [here](https://access.redhat.com/documentation/en-us/red_hat_openshift_ai_self-managed/2.5/html/working_on_data_science_projects/serving-large-language-models_serving-large-language-models) for up-to-date installation instructions.
