@@ -23,7 +23,8 @@ The procedures for installing and deploying the Caikit-TGIS-Serving stack have b
 
 - To support inferencing, your cluster needs a node with 4 CPUs and 8 GB memory. You can adjust these settings in the `spec.resources.requests` section of the Serving Runtime custom resource.
 - You need cluster administrator permissions for many of the procedures (such as, installing operators, setting service-mesh configuration, and enabling http2).
-- You have installed the OpenShift CLI (`oc`).
+- You have installed the OpenShift CLI (`oc`).  
+
 
 ### Procedures
 
