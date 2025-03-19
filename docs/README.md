@@ -19,6 +19,7 @@ The Caikit-TGIS-Serving stack consists of these components:
 
 The procedures for installing and deploying the Caikit-TGIS-Serving stack have been tested with Red Hat OpenShift Data Science self-managed on Red Hat OpenShift Service for AWS (ROSA) and OpenShift Dedicated clusters. They have not been tested with the OpenShift Data Science managed cloud service.
 
+
 ### Prerequisites
 
 - To support inferencing, your cluster needs a node with 4 CPUs and 8 GB memory. You can adjust these settings in the `spec.resources.requests` section of the Serving Runtime custom resource.
