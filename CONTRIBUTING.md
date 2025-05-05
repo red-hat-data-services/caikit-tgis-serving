@@ -1,4 +1,4 @@
-# Contributing to Caikit TGIS Serving
+# Contributing to Caikit TGIS Serving 
 
 Thanks for your interest in this project. You can contribute to this project in many different ways.
 
