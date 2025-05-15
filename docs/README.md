@@ -40,6 +40,7 @@ For RHODS<2.5.0 and ODH, there are two ways to install the KServe/Caikit/TGIS st
   - [OpenShift Serverless](https://docs.openshift.com/serverless/1.29/install/install-serverless-operator.html)
   - [Open Data Hub](https://opendatahub.io/docs/quick-installation/)
 
+
 ## Demos
 
 After you install the KServe/Caikit/TGIS stack, you can try these demos:
