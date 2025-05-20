@@ -11,6 +11,7 @@ The Caikit-TGIS-Serving stack consists of these components:
 - **[Service Mesh](https://docs.openshift.com/container-platform/4.13/service_mesh/v2x/ossm-architecture.html)** (istio): The service mesh networking layer that manages traffic flows and enforces access policies.
 - **[Serverless](https://docs.openshift.com/serverless/1.29/about/about-serverless.html)** (knative): A cloud-native development model that allows for serverless deployments of data models.
 
+
 ## Architecture of the stack
 
 ![KServe+Knative+Istio+Caikit_TGIS Diagram](https://github.com/opendatahub-io/caikit-tgis-serving/assets/8479010/7009b95d-0f6f-4f18-b0e6-355f360a5ad1)
@@ -35,7 +36,7 @@ For RHODS<2.5.0 and ODH, there are two ways to install the KServe/Caikit/TGIS st
 - [Script-based installation](/demo/kserve/scripts/README.md)
 
   Note: The installation procedures include commands for installing the following operators, which are required by the KServe/Caikit/TGIS stack:
-
+  
   - [Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.13/service_mesh/v2x/installing-ossm.html)
   - [OpenShift Serverless](https://docs.openshift.com/serverless/1.29/install/install-serverless-operator.html)
   - [Open Data Hub](https://opendatahub.io/docs/quick-installation/)
