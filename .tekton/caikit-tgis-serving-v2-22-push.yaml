@@ -25,7 +25,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rhoai-tenant/caikit-tgis-serving-poc:{{revision}}
+    value: quay.io/modh/caikit-tgis-serving:{{revision}}
   - name: dockerfile
     value: Dockerfile
   - name: path-context
@@ -596,7 +596,7 @@ spec:
     - name: netrc
       optional: true
   taskRunTemplate:
-    serviceAccountName: build-pipeline-caikit-tgis-serving-poc
+    serviceAccountName: build-pipeline-caikit-tgis-serving-v2-22
   workspaces:
   - name: git-auth
     secret:
