@@ -40,3 +40,11 @@ ENV CONFIG_FILES=/caikit/config/caikit.yml
 VOLUME ["/caikit/config/"]
 
 CMD ["python",  "-m", "caikit.runtime"]
+
+LABEL name="rhoai/odh-caikit-tgis-serving-rhel9" \
+      com.redhat.component="odh-caikit-tgis-serving-rhel9" \
+      io.k8s.display-name="odh-caikit-tgis-serving-rhel9" \
+      io.k8s.description="Caikit-TGIS-Serving is a stack that allows data scientists to perform Large Language Model (LLM) inference." \
+      description="Caikit-TGIS-Serving is a stack that allows data scientists to perform Large Language Model (LLM) inference." \
+      summary="Caikit-TGIS-Serving is a stack that allows data scientists to perform Large Language Model (LLM) inference." \
+      com.redhat.license_terms="https://www.redhat.com/licenses/Red_Hat_Standard_EULA_20191108.pdf"
