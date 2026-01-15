@@ -26,6 +26,7 @@ WORKDIR /caikit
 COPY --from=poetry-builder /caikit/.venv /caikit/.venv
 COPY caikit.yml /caikit/config/caikit.yml
 
+# Security fix: upgrade urllib3 to address CVE-2025-66418 (unbounded decompression / DoS)
 RUN /caikit/.venv/bin/pip install --no-cache-dir "urllib3>=2.6.0,<3"
 
 ENV VIRTUAL_ENV=/caikit/.venv
