@@ -13,7 +13,6 @@ WORKDIR /caikit
 COPY pyproject.toml .
 COPY poetry.lock .
 RUN pip3.12 install poetry && poetry install --no-root
-#RUN pip3.12 install poetry && poetry env use /usr/bin/python3.12 && poetry install --no-root
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as deploy
 RUN microdnf -y update && \
@@ -28,6 +27,14 @@ COPY caikit.yml /caikit/config/caikit.yml
 
 ENV VIRTUAL_ENV=/caikit/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN /caikit/.venv/bin/pip install --no-cache-dir \
+    "fastapi==0.123.7" \
+    "starlette>=0.49.1,<0.51.0" && \
+    /caikit/.venv/bin/pip install --no-cache-dir \
+    "urllib3>=2.6.0,<3" && \
+    /caikit/.venv/bin/pip install --no-cache-dir \
+    "aiohttp>=3.13.3,<4.0.0"
 
 RUN groupadd --system caikit --gid 1001 && \
     adduser --system --uid 1001 --gid 0 --groups caikit \
