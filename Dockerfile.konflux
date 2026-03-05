@@ -13,7 +13,6 @@ WORKDIR /caikit
 COPY pyproject.toml .
 COPY poetry.lock .
 RUN pip3.12 install poetry && poetry install --no-root
-#RUN pip3.12 install poetry && poetry env use /usr/bin/python3.12 && poetry install --no-root
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as deploy
 RUN microdnf -y update && \
