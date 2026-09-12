@@ -1,7 +1,6 @@
 approvers:
   - danielezonca
   - terrytangyuan
-  - dtrifiro
   - NickLucche
   - heyselbi
   - RH-steve-grubb
@@ -11,7 +10,6 @@ approvers:
   - tarukumar
   - Raghul-M
 reviewers:
-  - dtrifiro
   - NickLucche
   - heyselbi
   - RH-steve-grubb
