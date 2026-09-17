@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9/ubi-minimal-pqc@sha256:8a842ac769de709143e4edeace516f2008dfdc431b64670ad3353fa323b44736 as poetry-builder
+FROM registry.redhat.io/ubi9/ubi-minimal-pqc@sha256:fac0bde5012de6a8475bb5dc18db968cdc90b12d9dc2ffaddb4a4975d0b8a04f as poetry-builder
 
 RUN microdnf -y update && \
     microdnf -y install \
@@ -15,7 +15,7 @@ COPY poetry.lock .
 RUN pip3.11 install poetry && poetry install --no-root
 
 
-FROM registry.redhat.io/ubi9/ubi-minimal-pqc@sha256:8a842ac769de709143e4edeace516f2008dfdc431b64670ad3353fa323b44736 as deploy
+FROM registry.redhat.io/ubi9/ubi-minimal-pqc@sha256:fac0bde5012de6a8475bb5dc18db968cdc90b12d9dc2ffaddb4a4975d0b8a04f as deploy
 RUN microdnf -y update && \
     microdnf -y install \
         shadow-utils python3.11 && \
