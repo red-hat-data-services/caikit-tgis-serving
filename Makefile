@@ -15,3 +15,16 @@ shell: default
 		--name caikit-tgis-serving-test-$$(git rev-parse --short HEAD) \
 		$(CAIKIT_IMAGE):dev \
 		/bin/bash
+
+# Regenerate poetry.lock in a container, so contributors don't need a
+# local poetry install (CONTRIBUTING.md documents this target).
+# Version-preserving: it repairs/rewrites the lockfile without changing
+# any locked package version. Use `poetry update <pkg>` inside the
+# container to move specific packages.
+refresh-poetry-lock-files:
+	$(ENGINE) run --rm \
+		-v $$(pwd):/workspace:Z -w /workspace \
+		-e HOME=/tmp \
+		--user $$(id -u):$$(id -g) \
+		python:3.11-slim \
+		bash -c "pip install --quiet --user poetry==2.5.1 && /tmp/.local/bin/poetry lock"
