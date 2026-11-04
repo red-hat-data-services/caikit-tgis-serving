@@ -23,6 +23,8 @@ shell: default
 # container to move specific packages.
 refresh-poetry-lock-files:
 	$(ENGINE) run --rm \
-		-v $$(pwd):/workspace -w /workspace \
+		-v $$(pwd):/workspace:Z -w /workspace \
+		-e HOME=/tmp \
+		--user $$(id -u):$$(id -g) \
 		python:3.11-slim \
-		bash -c "pip install --quiet poetry==2.5.1 && poetry lock"
+		bash -c "pip install --quiet --user poetry==2.5.1 && /tmp/.local/bin/poetry lock"
