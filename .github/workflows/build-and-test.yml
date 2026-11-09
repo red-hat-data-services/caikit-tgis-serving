@@ -117,9 +117,31 @@ jobs:
                 ctr -n k8s.io images import -
 
       - name: Install kserve
+        shell: bash
         run: |
           # Use the hack/quick_install.sh script from the kserve repo
-          curl https://raw.githubusercontent.com/opendatahub-io/kserve/v0.11.1.1/hack/quick_install.sh | bash
+          set +e
+          curl -fsSL https://raw.githubusercontent.com/opendatahub-io/kserve/v0.11.1.1/hack/quick_install.sh | bash
+          set -e
+          # quick_install.sh applies kserve-runtimes.yaml as soon as the
+          # controller pod reports Ready, but the admission webhook can still be
+          # a few seconds away from serving TLS on its service endpoint. The
+          # apply then fails with `dial tcp <ip>:443: connect: connection
+          # refused`. Retry the apply rather than treating the race as an
+          # install failure.
+          if ! kubectl get crd clusterservingruntimes.serving.kserve.io >/dev/null 2>&1; then
+            echo "::error::quick_install.sh did not install the kserve CRDs"
+            exit 1
+          fi
+          for attempt in $(seq 1 20); do
+            if kubectl apply -f https://github.com/kserve/kserve/releases/download/v0.11.1/kserve-runtimes.yaml; then
+              exit 0
+            fi
+            echo "kserve-runtimes.yaml apply failed (attempt ${attempt}/20), retrying in 15s"
+            sleep 15
+          done
+          echo "::error::could not apply kserve-runtimes.yaml after 20 attempts"
+          exit 1
 
       - name: Patch Istio Ingressway
         run: |
