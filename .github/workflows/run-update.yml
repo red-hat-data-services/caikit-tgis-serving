@@ -38,8 +38,13 @@ jobs:
         # fails the job instead of being masked by the `tee` in the pipeline.
         shell: bash
         run: |
+          # Update only the packages listed in .github/poetry-update-packages.txt.
+          # A bare `poetry update` floats every transitive dependency, which
+          # produced a 93-package, 25-new-package pull request with protobuf
+          # moving from 4 to 6. Packages outside the list are bumped on purpose.
           echo 'log<<EOF' >> $GITHUB_OUTPUT
-          poetry update | tee -a >(cat >> $GITHUB_OUTPUT)
+          poetry update $(tr '\n' ' ' < .github/poetry-update-packages.txt) \
+            | tee -a >(cat >> $GITHUB_OUTPUT)
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Check diff

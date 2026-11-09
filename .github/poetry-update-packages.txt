@@ -1,0 +1,7 @@
+pillow
+urllib3
+certifi
+aiohttp
+fsspec
+filelock
+dnspython
