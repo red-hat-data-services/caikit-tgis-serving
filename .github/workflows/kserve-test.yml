@@ -41,6 +41,17 @@ jobs:
           cluster_name: ${{ env.KIND_CLUSTER_NAME }}
           config: test/kserve/kind_config.yaml
 
+      # Same decommissioned registry as in build-and-test.yml: the kserve
+      # controller manifest still references kube-rbac-proxy on
+      # gcr.io/kubebuilder, so pre-load it under that name.
+      - name: Preload kube-rbac-proxy sidecar
+        run: |
+          docker pull registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1
+          docker tag registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1 \
+            gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+          kind load docker-image --name ${{ env.KIND_CLUSTER_NAME }} \
+            gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+
       - name: Install kserve
         run: |
           # Use the hack/quick_install.sh script from the kserve repo
