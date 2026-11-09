@@ -26,10 +26,17 @@ jobs:
 
       - name: Setup virtualenv
         run: |
-          poetry install
+          # --no-root: the root package declares readme = "README.md" and is
+          # never needed here, we only run `poetry update` against the
+          # dependency set. Installing the root package fails the whole run
+          # when a packaging-only file is missing.
+          poetry install --no-root
 
       - name: Refresh poetry lock files
         id: poetry-update
+        # shell: bash enables `-eo pipefail`, so a failing `poetry update`
+        # fails the job instead of being masked by the `tee` in the pipeline.
+        shell: bash
         run: |
           echo 'log<<EOF' >> $GITHUB_OUTPUT
           poetry update | tee -a >(cat >> $GITHUB_OUTPUT)
