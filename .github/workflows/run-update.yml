@@ -38,9 +38,33 @@ jobs:
         # fails the job instead of being masked by the `tee` in the pipeline.
         shell: bash
         run: |
-          echo 'log<<EOF' >> $GITHUB_OUTPUT
-          poetry update | tee -a >(cat >> $GITHUB_OUTPUT)
-          echo 'EOF' >> $GITHUB_OUTPUT
+          # Update only the packages listed in .github/poetry-update-packages.txt.
+          # A bare `poetry update` floats every transitive dependency, which
+          # produced a 93-package, 25-new-package pull request with protobuf
+          # moving from 4 to 6. Packages outside the list are bumped on purpose.
+          list=.github/poetry-update-packages.txt
+          if [ ! -r "$list" ]; then
+            echo "::error::$list is missing or unreadable; refusing to run an unrestricted poetry update"
+            exit 1
+          fi
+          # An empty list would expand to `poetry update` with no arguments,
+          # which is exactly the unrestricted update this workflow avoids.
+          mapfile -t packages < <(sed -e 's/#.*//' "$list" | tr -d '\r' | awk 'NF { print $1 }')
+          if [ "${#packages[@]}" -eq 0 ]; then
+            echo "::error::$list contains no package names; refusing to run an unrestricted poetry update"
+            exit 1
+          fi
+          # Capture first, then write the heredoc. A process substitution can
+          # still be writing to $GITHUB_OUTPUT when the terminator lands, and
+          # the runner rejects a trailing line after the delimiter.
+          log="$(mktemp)"
+          poetry update "${packages[@]}" | tee "$log"
+          {
+            echo 'log<<EOF'
+            cat "$log"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+          rm -f "$log"
 
       - name: Check diff
         id: diff
@@ -62,7 +86,9 @@ jobs:
             dependencies
             ok-to-test
           body: |
-            Update dependencies using `poetry update`:
+            Update dependencies using `poetry update` on the packages listed in
+            `.github/poetry-update-packages.txt`. Packages outside that list are
+            upgraded deliberately.
 
             ```console
             ${{ steps.poetry-update.outputs.log }}

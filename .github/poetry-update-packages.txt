@@ -1,0 +1,13 @@
+# Packages whose locked versions are refreshed every week.
+# Only list packages that carry CVE fixes: everything here moves the shipped
+# image venv, so a bad entry fails the Smoke Test rather than the review.
+pillow
+urllib3
+certifi
+aiohttp
+filelock
+dnspython
+# fsspec is left out on purpose. CVE-2026-104851 is fixed in fsspec 2026.6.0,
+# but datasets 3.3.2 caps fsspec at 2024.12.0, and moving to datasets 5 pulls
+# pyarrow>=21, which requires numpy 2, which caikit-nlp 0.5.14 forbids. The
+# image installs fsspec over the resolved venv instead (Dockerfile.konflux).
