@@ -110,8 +110,11 @@ jobs:
           docker pull registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1
           docker tag registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1 \
             gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
-          kind load docker-image --name ${{ env.KIND_CLUSTER_NAME }} \
-            gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+          # kind load docker-image imports with --all-platforms, which fails
+          # when the local daemon only holds linux/amd64. Import directly.
+          docker save gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1 \
+            | docker exec -i ${{ env.KIND_CLUSTER_NAME }}-control-plane \
+                ctr -n k8s.io images import -
 
       - name: Install kserve
         run: |
