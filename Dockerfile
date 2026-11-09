@@ -29,8 +29,8 @@ COPY caikit.yml /caikit/config/caikit.yml
 ENV VIRTUAL_ENV=/caikit/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN groupadd --system caikit --gid 1001 && \
-    adduser --system --uid 1001 --gid 0 --groups caikit \
+RUN groupadd --gid 1001 caikit && \
+    adduser --uid 1001 --gid 0 --groups caikit \
     --create-home --home-dir /caikit --shell /sbin/nologin \
     --comment "Caikit User" caikit
 
