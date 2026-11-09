@@ -95,11 +95,63 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup kind/kserve
-        uses: dtrifiro/setup-kserve@v0.0.2
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.12.0
         with:
           cluster_name: ${{ env.KIND_CLUSTER_NAME }}
-          namespace: ${{ env.TEST_NS }}
+          config: test/kserve/kind_config.yaml
+
+      # gcr.io/kubebuilder is decommissioned. The kserve controller manifest
+      # still points its kube-rbac-proxy sidecar there, so the pod stays in
+      # ImagePullBackOff and quick_install.sh times out waiting for it. Load
+      # the image under the original name from its current home instead.
+      - name: Preload kube-rbac-proxy sidecar
+        run: |
+          docker pull registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1
+          docker tag registry.k8s.io/kubebuilder/kube-rbac-proxy:v0.13.1 \
+            gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+          kind load docker-image --name ${{ env.KIND_CLUSTER_NAME }} \
+            gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+
+      - name: Install kserve
+        run: |
+          # Use the hack/quick_install.sh script from the kserve repo
+          curl https://raw.githubusercontent.com/opendatahub-io/kserve/v0.11.1.1/hack/quick_install.sh | bash
+
+      - name: Patch Istio Ingressway
+        run: |
+          # bind the istio ingressway ports on the host so that we can access its services
+          kubectl patch deployments.apps -o yaml -n istio-system istio-ingressgateway -p '{
+            "spec":
+              {"template":
+                {"spec":
+                  {"containers":
+                    [
+                      {
+                        "name":
+                        "istio-proxy",
+                        "ports":
+                          [
+                            {
+                              "containerPort":8080,
+                              "hostPort":80
+                            },
+                            {
+                              "containerPort":8443,
+                              "hostPort":443
+                            }
+                          ]
+                      }
+                    ]
+                  }
+                }
+              }
+          }'
+
+      - name: Setup testing namespace
+        run: |
+          kubectl create namespace ${{ env.TEST_NS }}
+          kubectl config set-context "kind-${{ env.KIND_CLUSTER_NAME }}" --namespace ${{ env.TEST_NS }}
 
       - name: Download built image
         uses: actions/download-artifact@v4
