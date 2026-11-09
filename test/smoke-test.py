@@ -8,9 +8,13 @@ import caikit_nlp_client
 
 def wait_until(
     pred,
-    timeout: float = 15,
+    timeout: float = 180,
     pause: float = 1,
 ):
+    # caikit imports caikit_nlp, loads torch and reads the model before it
+    # opens the gRPC port, which takes 20-30s on a cold runner. 15s was enough
+    # only on a warm one. The loop returns as soon as the request succeeds, so
+    # a generous ceiling costs nothing when the service comes up quickly.
     start = time.perf_counter()
     exc = None
     while (time.perf_counter() - start) < timeout:
