@@ -23,10 +23,14 @@ Architecture, components and installation procedures are in
 ## Build and test
 
 ```bash
-make                    # build the image as caikit-tgis-serving:dev
-make shell              # open a shell in the built image
+make                             # build the image as caikit-tgis-serving:dev
+make shell                       # open a shell in the built image
 make refresh-poetry-lock-files   # regenerate poetry.lock in a container
+./test/compose/smoke-test.sh     # run the smoke tests (requires docker compose)
 ```
+
+The make targets default to Podman. With Docker, pass `ENGINE=docker`, for
+example `make ENGINE=docker`.
 
 The weekly dependency-update workflow regenerates `poetry.lock` and opens a
 pull request when locked versions change.

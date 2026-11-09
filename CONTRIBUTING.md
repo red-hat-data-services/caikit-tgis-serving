@@ -44,7 +44,7 @@ virtualenv -p 3.9 venv
 source venv/bin/activate
 
 #Run the smoke tests (which use docker compose to start up the servers)
-./test/smoke-test.sh
+./test/compose/smoke-test.sh
 ```
 
 Please note that running the smoke tests requires docker compose. Using podman to run the docker compose has not been tested.

@@ -34,6 +34,9 @@ jobs:
 
       - name: Refresh poetry lock files
         id: poetry-update
+        # shell: bash enables `-eo pipefail`, so a failing `poetry update`
+        # fails the job instead of being masked by the `tee` in the pipeline.
+        shell: bash
         run: |
           echo 'log<<EOF' >> $GITHUB_OUTPUT
           poetry update | tee -a >(cat >> $GITHUB_OUTPUT)
